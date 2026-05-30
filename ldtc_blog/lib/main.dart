@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -7,115 +9,430 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'ABA LDTC Group of Companies',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF2B59FF),
+        ),
+        useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  final PageController _pageController = PageController();
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  int currentPage = 0;
+  Timer? sliderTimer;
+
+  final List<String> heroImages = [
+    "https://picsum.photos/id/237/1600/900",
+    "https://picsum.photos/id/1011/1600/900",
+    "https://picsum.photos/id/1005/1600/900",
+  ];
+
+  final List<String> heroTexts = [
+    "Professional ABA Therapy Services for Every Child",
+    "Supportive and Play-Based Therapy Approach",
+    "Empowering Families Through Compassionate Care",
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    sliderTimer = Timer.periodic(
+      const Duration(seconds: 4),
+      (_) {
+        if (_pageController.hasClients) {
+          currentPage++;
+
+          if (currentPage >= heroImages.length) {
+            currentPage = 0;
+          }
+
+          _pageController.animateToPage(
+            currentPage,
+            duration: const Duration(milliseconds: 800),
+            curve: Curves.easeInOut,
+          );
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    sliderTimer?.cancel();
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    final bool mobile = MediaQuery.of(context).size.width < 768;
+
     return Scaffold(
+      drawer: mobile ? const MobileDrawer() : null,
+
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        backgroundColor: Colors.white,
+        elevation: 2,
+        title: const Text(
+          "ABA Therapy",
+          style: TextStyle(
+            color: Color(0xFF2B59FF),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        actions: mobile
+            ? null
+            : [
+                _navItem("Home"),
+                _navItem("Career"),
+                PopupMenuButton<String>(
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Center(
+                      child: Text(
+                        "Location",
+                        style: TextStyle(color: Colors.black87),
+                      ),
+                    ),
+                  ),
+                  itemBuilder: (context) => const [
+                    PopupMenuItem(
+                      value: "Valenzuela",
+                      child: Text("Valenzuela"),
+                    ),
+                    PopupMenuItem(
+                      value: "Roosevelt",
+                      child: Text("Roosevelt"),
+                    ),
+                    PopupMenuItem(
+                      value: "Tandang Sora",
+                      child: Text("Tandang Sora"),
+                    ),
+                    PopupMenuItem(
+                      value: "Bulacan",
+                      child: Text("Bulacan"),
+                    ),
+                  ],
+                ),
+                _navItem("About Us"),
+                _navItem("Contact Us"),
+                const SizedBox(width: 20),
+              ],
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+
+      body: SingleChildScrollView(
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: .center,
           children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+
+            // HERO SLIDER
+            SizedBox(
+              height: mobile ? 500 : 700,
+              child: Stack(
+                children: [
+                  PageView.builder(
+                    controller: _pageController,
+                    itemCount: heroImages.length,
+                    itemBuilder: (context, index) {
+                      return Stack(
+                        fit: StackFit.expand,
+                        children: [
+
+                          Image.network(
+                            heroImages[index],
+                            fit: BoxFit.cover,
+                          ),
+
+                          Container(
+                            color: Colors.black.withOpacity(.45),
+                          ),
+
+                          Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(24),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "ABA Learning Difference Therapy Center",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: mobile ? 30 : 55,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 20),
+
+                                  Text(
+                                    heroTexts[index],
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: mobile ? 16 : 22,
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 40),
+
+                                  ElevatedButton(
+                                    onPressed: () {},
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          const Color(0xFF2B59FF),
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 35,
+                                        vertical: 16,
+                                      ),
+                                    ),
+                                    child: const Text("Learn More"),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+
+            // ABA SECTION
+            TweenAnimationBuilder(
+              duration: const Duration(milliseconds: 1200),
+              tween: Tween<double>(
+                begin: 60,
+                end: 0,
+              ),
+              builder: (context, value, child) {
+                return Transform.translate(
+                  offset: Offset(0, value),
+                  child: Opacity(
+                    opacity: 1 - (value / 60),
+                    child: child,
+                  ),
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 80,
+                ),
+                child: mobile
+                    ? Column(
+                        children: [
+                          _abaTextSection(),
+                          const SizedBox(height: 40),
+                          const RotatingGallery(),
+                        ],
+                      )
+                    : Row(
+                        children: [
+                          Expanded(
+                            child: _abaTextSection(),
+                          ),
+                          const Expanded(
+                            child: RotatingGallery(),
+                          ),
+                        ],
+                      ),
+              ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+    );
+  }
+
+  Widget _navItem(String title) {
+    return TextButton(
+      onPressed: () {},
+      child: Text(
+        title,
+        style: const TextStyle(
+          color: Colors.black87,
+        ),
+      ),
+    );
+  }
+
+  Widget _abaTextSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "What is ABA Therapy?",
+          style: TextStyle(
+            fontSize: 42,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+
+        const SizedBox(height: 24),
+
+        const Text(
+          "Applied Behavior Analysis (ABA) is a therapy based on the science of learning and behavior. It helps children improve communication, social interaction, focus, and daily living skills.",
+          style: TextStyle(
+            fontSize: 18,
+            height: 1.8,
+            color: Colors.black54,
+          ),
+        ),
+
+        const SizedBox(height: 20),
+
+        const Text(
+          "ABA uses positive reinforcement and structured learning to help children grow with confidence in a fun and supportive environment.",
+          style: TextStyle(
+            fontSize: 18,
+            height: 1.8,
+            color: Colors.black54,
+          ),
+        ),
+
+        const SizedBox(height: 25),
+
+        ElevatedButton(
+          onPressed: () {},
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF2B59FF),
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 35,
+              vertical: 16,
+            ),
+          ),
+          child: const Text("Learn More"),
+        ),
+      ],
+    );
+  }
+}
+
+class MobileDrawer extends StatelessWidget {
+  const MobileDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        children: const [
+          DrawerHeader(
+            child: Text(
+              "ABA Therapy",
+              style: TextStyle(fontSize: 24),
+            ),
+          ),
+          ListTile(title: Text("Home")),
+          ListTile(title: Text("Career")),
+          ExpansionTile(
+            title: Text("Location"),
+            children: [
+              ListTile(title: Text("Valenzuela")),
+              ListTile(title: Text("Roosevelt")),
+              ListTile(title: Text("Tandang Sora")),
+              ListTile(title: Text("Bulacan")),
+            ],
+          ),
+          ListTile(title: Text("About Us")),
+          ListTile(title: Text("Contact Us")),
+        ],
+      ),
+    );
+  }
+}
+
+class RotatingGallery extends StatefulWidget {
+  const RotatingGallery({super.key});
+
+  @override
+  State<RotatingGallery> createState() => _RotatingGalleryState();
+}
+
+class _RotatingGalleryState extends State<RotatingGallery>
+    with SingleTickerProviderStateMixin {
+  late AnimationController controller;
+
+  final List<String> images = [
+    "https://picsum.photos/id/1015/500/500",
+    "https://picsum.photos/id/1025/500/500",
+    "https://picsum.photos/id/1035/500/500",
+    "https://picsum.photos/id/1045/500/500",
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 18),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 350,
+      width: 350,
+      child: AnimatedBuilder(
+        animation: controller,
+        builder: (_, __) {
+          return Transform.rotate(
+            angle: controller.value * 2 * pi,
+            child: Stack(
+              alignment: Alignment.center,
+              children: List.generate(
+                images.length,
+                (index) {
+                  final angle =
+                      (2 * pi / images.length) * index;
+
+                  return Transform.translate(
+                    offset: Offset(
+                      cos(angle) * 120,
+                      sin(angle) * 120,
+                    ),
+                    child: CircleAvatar(
+                      radius: 70,
+                      backgroundImage:
+                          NetworkImage(images[index]),
+                    ),
+                  );
+                },
+              ),
+            ),
+          );
+        },
       ),
     );
   }
