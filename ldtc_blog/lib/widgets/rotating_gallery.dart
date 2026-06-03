@@ -14,13 +14,16 @@ class _RotatingGalleryState extends State<RotatingGallery>
 
   late AnimationController controller;
 
-  final images = [
-    "https://picsum.photos/id/1015/500/500",
-    "https://picsum.photos/id/1025/500/500",
-    "https://picsum.photos/id/1035/500/500",
-    "https://picsum.photos/id/1045/500/500",
-  ];
-
+final images = [
+  "assets/images/ABA1.jpg",
+  "assets/images/ABA2.jpg",
+  "assets/images/ABA3.jpg",
+  "assets/images/ABA4.jpg",
+  "assets/images/ABA5.jpg",
+  "assets/images/ABA6.jpg",
+  "assets/images/ABA7.jpg",
+];
+  
   @override
   void initState() {
     super.initState();
@@ -34,8 +37,8 @@ class _RotatingGalleryState extends State<RotatingGallery>
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 350,
-      height: 350,
+      width: 450,
+      height: 450,
       child: AnimatedBuilder(
         animation: controller,
         builder: (_, __) {
@@ -51,13 +54,13 @@ class _RotatingGalleryState extends State<RotatingGallery>
 
                   return Transform.translate(
                     offset: Offset(
-                      cos(angle) * 120,
-                      sin(angle) * 120,
+                      cos(angle) * 150,
+                      sin(angle) * 150,
                     ),
                     child: CircleAvatar(
                       radius: 70,
                       backgroundImage:
-                          NetworkImage(images[index]),
+                          AssetImage(images[index]),
                     ),
                   );
                 },

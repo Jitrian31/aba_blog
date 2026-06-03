@@ -48,8 +48,23 @@ class AbaSection extends StatelessWidget {
         const SizedBox(height: 20),
 
         const Text(
-          "Applied Behavior Analysis (ABA) is a therapy based on the science of learning and behavior.",
-        ),
+           '''Applied Behavior Analysis (ABA) is a scientific approach to understanding and improving behavior. It focuses on how learning takes place and how behavior is influenced by the environment.
+
+ABA therapy is commonly used to help children and individuals develop important skills, such as:
+
+• Communication and language skills
+• Social interaction skills
+• Play and leisure skills
+• Self-care and daily living skills
+• Academic and learning skills
+• Attention and focus
+• Reducing challenging behaviors that may interfere with learning or daily life''',
+  style: TextStyle(
+    fontSize: 16,
+    height: 1.6,
+    color: Colors.black87,
+  )
+),
 
         const SizedBox(height: 20),
 

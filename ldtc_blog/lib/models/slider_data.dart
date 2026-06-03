@@ -1,9 +1,9 @@
 class SliderData {
   static const List<String> images = [
-    "https://picsum.photos/id/237/1600/900",
-    "https://picsum.photos/id/1011/1600/900",
-    "https://picsum.photos/id/1005/1600/900",
-  ];
+  "assets/images/hero1.jpg",
+  "assets/images/hero2.jpg",
+  "assets/images/hero3.jpg",
+];
 
   static const List<String> texts = [
     "Professional ABA Therapy Services for Every Child",

@@ -59,7 +59,7 @@ class _HeroSliderState extends State<HeroSlider> {
           return Stack(
             fit: StackFit.expand,
             children: [
-              Image.network(
+              Image.asset(
                 SliderData.images[index],
                 fit: BoxFit.cover,
               ),
