@@ -5,24 +5,63 @@ import '../widgets/hero_slider.dart';
 import '../widgets/aba_section.dart';
 import '../widgets/header.dart';
 
-
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final mobile = MediaQuery.of(context).size.width < 768;
+  State<HomePage> createState() => _HomePageState();
+}
 
+class _HomePageState extends State<HomePage> {
+  final ScrollController _controller = ScrollController();
+
+  bool isScrolled = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller.addListener(() {
+      final scrolled = _controller.offset > 20;
+
+      if (scrolled != isScrolled) {
+        setState(() {
+          isScrolled = scrolled;
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      drawer: mobile ? const MobileDrawer() : null,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const Header(),
-            HeroSlider(),
-            AbaSection(),
-          ],
-        ),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            controller: _controller,
+            child: Column(
+              children: [
+                // 🔥 HERO SECTION MO (carousel/slider)
+                HeroSlider(),
+
+                // OTHER CONTENT
+                Container(
+                  height: 1000,
+                  color: Colors.white,
+                ),
+              ],
+            ),
+          ),
+
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Header(
+              isScrolled: isScrolled,
+            ),
+          ),
+        ],
       ),
     );
   }

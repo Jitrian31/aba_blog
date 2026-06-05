@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../models/slider_data.dart';
+import '../data/slider_data.dart';
 
 class HeroSlider extends StatefulWidget {
   const HeroSlider({super.key});

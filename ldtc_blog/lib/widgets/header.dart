@@ -1,28 +1,35 @@
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {
-  const Header({super.key});
+  final bool isScrolled;
+
+  const Header({
+    super.key,
+    required this.isScrolled,
+  });
 
   @override
   Widget build(BuildContext context) {
     final mobile = MediaQuery.of(context).size.width < 768;
 
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 250),
       height: 80,
       padding: const EdgeInsets.symmetric(horizontal: 30),
       decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(.08),
-            blurRadius: 15,
-          ),
-        ],
+        color: isScrolled ? Colors.white : Colors.transparent,
+        boxShadow: isScrolled
+            ? [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.08),
+                  blurRadius: 15,
+                ),
+              ]
+            : [],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-
           const Text(
             "ABA Therapy",
             style: TextStyle(
@@ -32,60 +39,41 @@ class Header extends StatelessWidget {
             ),
           ),
 
-          if (!mobile)
-            Row(
-              children: [
-                _navButton("Home"),
-                _navButton("Career"),
-
-                PopupMenuButton<String>(
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: Text(
-                      "Location",
-                      style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 16,
-                      ),
+          mobile
+              ? Builder(
+                  builder: (context) => IconButton(
+                    icon: Icon(
+                      Icons.menu,
+                      color: isScrolled ? Colors.black : Colors.white,
                     ),
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
                   ),
-                  itemBuilder: (context) => const [
-                    PopupMenuItem(
-                      value: "Valenzuela",
-                      child: Text("Valenzuela"),
-                    ),
-                    PopupMenuItem(
-                      value: "Roosevelt",
-                      child: Text("Roosevelt"),
-                    ),
-                    PopupMenuItem(
-                      value: "Tandang Sora",
-                      child: Text("Tandang Sora"),
-                    ),
-                    PopupMenuItem(
-                      value: "Bulacan",
-                      child: Text("Bulacan"),
-                    ),
+                )
+              : Row(
+                  children: [
+                    _navButton("Home", isScrolled),
+                    _navButton("Career", isScrolled),
+                    _navButton("Location", isScrolled),
+                    _navButton("About Us", isScrolled),
+                    _navButton("Contact Us", isScrolled),
                   ],
                 ),
-
-                _navButton("About Us"),
-                _navButton("Contact Us"),
-              ],
-            ),
         ],
       ),
     );
   }
 
-  Widget _navButton(String title) {
+  Widget _navButton(String title, bool isScrolled) {
     return TextButton(
       onPressed: () {},
       child: Text(
         title,
-        style: const TextStyle(
-          color: Colors.black87,
+        style: TextStyle(
+          color: isScrolled ? Colors.black87 : Colors.white,
           fontSize: 16,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );

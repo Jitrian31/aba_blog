@@ -60,7 +60,7 @@ ABA therapy is commonly used to help children and individuals develop important 
 • Attention and focus
 • Reducing challenging behaviors that may interfere with learning or daily life''',
   style: TextStyle(
-    fontSize: 16,
+    fontSize: 20,
     height: 1.6,
     color: Colors.black87,
   )
