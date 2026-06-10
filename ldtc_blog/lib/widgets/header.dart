@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:ldtc_blog/Pages/career_page.dart';
+import '../pages/home_page.dart';
+
 
 class Header extends StatelessWidget {
   final bool isScrolled;
+  final GlobalKey<ScaffoldState>? scaffoldKey;
 
   const Header({
     super.key,
     required this.isScrolled,
+    this.scaffoldKey,
   });
 
   @override
@@ -40,24 +45,35 @@ class Header extends StatelessWidget {
           ),
 
           mobile
-              ? Builder(
-                  builder: (context) => IconButton(
+              ? IconButton(
+                  
                     icon: Icon(
                       Icons.menu,
                       color: isScrolled ? Colors.black : Colors.white,
                     ),
                     onPressed: () {
-                      Scaffold.of(context).openDrawer();
+                      scaffoldKey?.currentState?.openDrawer();
                     },
-                  ),
+                  
                 )
               : Row(
-                  children: [
-                    _navButton("Home", isScrolled),
-                    _navButton("Career", isScrolled),
-                    _navButton("Location", isScrolled),
-                    _navButton("About Us", isScrolled),
-                    _navButton("Contact Us", isScrolled),
+                children: [
+                  _navButton(
+                    context,
+                    "Home",
+                    isScrolled,
+                    const HomePage(),),
+
+                  _navButton(
+                    context,
+                    "Career",
+                    isScrolled,
+                    const CareerPage(),
+                  ),
+
+                  _navButton(context, "Location", isScrolled, null),
+                  _navButton(context, "About Us", isScrolled, null),
+                  _navButton(context, "Contact Us", isScrolled, null),
                   ],
                 ),
         ],
@@ -65,9 +81,23 @@ class Header extends StatelessWidget {
     );
   }
 
-  Widget _navButton(String title, bool isScrolled) {
+    Widget _navButton(
+    BuildContext context,
+    String title,
+    bool isScrolled,
+    Widget? page,
+  ) {
     return TextButton(
-      onPressed: () {},
+      onPressed: () {
+        if (page != null) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => page,
+            ),
+          );  
+        }
+      },
       child: Text(
         title,
         style: TextStyle(
