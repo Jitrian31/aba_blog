@@ -12,21 +12,13 @@ class CareerPage extends StatefulWidget {
   @override
   State<CareerPage> createState() => _CareerPageState();
 }
-
+class _CareerPageState extends State<CareerPage> {
 final GlobalKey<ScaffoldState> _scaffoldKey =
     GlobalKey<ScaffoldState>();
-
-
-  final ScrollController _controller = ScrollController();
-
+  
+final ScrollController _controller = ScrollController();
   bool isScrolled = false;
-
-
-
-class _CareerPageState extends State<CareerPage> {
-  final ScrollController _controller = ScrollController();
-
-  bool isScrolled = false;
+  bool? _lastMobile;
 
   @override
   void initState() {
@@ -43,9 +35,22 @@ class _CareerPageState extends State<CareerPage> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
-    final mobile = MediaQuery.of(context).size.width < 768;
+    return LayoutBuilder(
+
+    builder: (context, constraints) {
+    final mobile = constraints.maxWidth < 768;
+
+if (_lastMobile != null && _lastMobile != mobile) {
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    Navigator.of(context, rootNavigator: true).maybePop();
+  });
+}
+
+_lastMobile = mobile;
+
 
     return Scaffold(
       key: _scaffoldKey,
@@ -158,13 +163,18 @@ Padding(
           ),
 
           Header(
+            key: ValueKey(mobile),
             isScrolled: isScrolled,
+            mobile: mobile,
             scaffoldKey: _scaffoldKey,
           ),
         ],
-      ),
+       ),
+      );
+    },
     );
-  }
+}
+
 
   Widget _careerImage() {
     return ClipRRect(
@@ -200,4 +210,3 @@ Padding(
     );
   }
 }
-

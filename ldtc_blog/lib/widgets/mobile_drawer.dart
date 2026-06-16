@@ -39,6 +39,18 @@ class MobileDrawer extends StatelessWidget {
             },
           ),
 
+ListTile(
+            title: const Text("Services"),
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const HomePage(),
+                ),
+              );
+            },
+          ),
+
           ListTile(
             title: const Text("Career"),
             onTap: () {

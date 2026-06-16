@@ -4,6 +4,7 @@ import 'rotating_gallery.dart';
 
 class AbaSection extends StatelessWidget {
   const AbaSection({super.key});
+  
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,7 @@ class AbaSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          "What is ABA Therapy?",
+          "About Our Therapy Center",
           style: TextStyle(
             fontSize: 42,
             fontWeight: FontWeight.bold,
@@ -48,17 +49,12 @@ class AbaSection extends StatelessWidget {
         const SizedBox(height: 20),
 
         const Text(
-           '''Applied Behavior Analysis (ABA) is a scientific approach to understanding and improving behavior. It focuses on how learning takes place and how behavior is influenced by the environment.
+           '''ABA Learning Difference Therapy Center is a private, multi-branch developmental
+and behavioral intervention facility in the Philippines that specializes in supporting children and teens with special needs
 
-ABA therapy is commonly used to help children and individuals develop important skills, such as:
-
-• Communication and language skills
-• Social interaction skills
-• Play and leisure skills
-• Self-care and daily living skills
-• Academic and learning skills
-• Attention and focus
-• Reducing challenging behaviors that may interfere with learning or daily life''',
+Guided by the motto "No child will be left behind," the center provides 
+evidence-based practices to help neurodivergent individuals and children with developmental disabilities build crucial life skills.
+            ''',
   style: TextStyle(
     fontSize: 20,
     height: 1.6,
@@ -66,13 +62,38 @@ ABA therapy is commonly used to help children and individuals develop important 
   )
 ),
 
-        const SizedBox(height: 20),
+        const SizedBox(height: 30),
 
         ElevatedButton(
-          onPressed: () {},
-          child: const Text("Learn More"),
+  onPressed: () {},
+  style: ElevatedButton.styleFrom(
+    backgroundColor: const Color(0xFF7ED957),
+    foregroundColor: Colors.white,
+    padding: const EdgeInsets.symmetric(
+      horizontal: 30,
+      vertical: 18,
+    ),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(30),
+    ),
+  ),
+  child: const Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Text(
+        "Explore About ABA LDTC",
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
         ),
+      ),
+      SizedBox(width: 10),
+      Icon(Icons.arrow_forward),
+      ],
+    ),
+  ),
       ],
     );
   }
 }
+
