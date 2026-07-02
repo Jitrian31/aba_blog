@@ -1,17 +1,22 @@
-import 'dart:math';
+import 'dart:async';  
 import 'package:flutter/material.dart';
+
 
 class RotatingGallery extends StatefulWidget {
   const RotatingGallery({super.key});
 
+
   @override
   State<RotatingGallery> createState() => _RotatingGalleryState();
-}
+    
 
-class _RotatingGalleryState extends State<RotatingGallery>
-    with SingleTickerProviderStateMixin {
-  late AnimationController controller;
+}   
 
+class _RotatingGalleryState extends State<RotatingGallery> {
+  int currentIndex = 0;
+
+  Timer? timer;
+  
   final images = [
     "assets/images/ABA1.jpg",
     "assets/images/ABA2.jpg",
@@ -22,67 +27,112 @@ class _RotatingGalleryState extends State<RotatingGallery>
     "assets/images/ABA7.jpg",
   ];
 
-  @override
-  void initState() {
-    super.initState();
+  void nextImage() {
+        setState(() {
+      currentIndex = (currentIndex + 1) % images.length;
+    });
+  }
 
-    controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 12),
-    )..repeat();
+    @override
+        void initState() {
+          super.initState();
+
+          timer = Timer.periodic(
+            const Duration(seconds: 15),
+            (_) {
+              if (mounted) {
+                nextImage();
+              }
+            },
+          );
+        }
+
+    void prevImage() {
+    setState(() {
+      currentIndex =
+          (currentIndex - 1 + images.length) % images.length;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 500,
-      height: 450,
-      child: AnimatedBuilder(
-        animation: controller,
-        builder: (context, child) {
-          return Stack(
-            alignment: Alignment.center,
-            children: List.generate(
-              images.length,
-              (index) {
-                final angle =
-                    (2 * pi / images.length) * index +
-                    (controller.value * 2 * pi);
+    final mobile = MediaQuery.of(context).size.width < 768;
 
-                final z = cos(angle);
+return SizedBox(
+  width: mobile ? 300 : 500,
+  height: mobile ? 300 : 450,
+  child: Stack(
+    alignment: Alignment.center,
+    children: [
+      GestureDetector(
+  onHorizontalDragEnd: (details) {
 
-                final scale = 0.6 + ((z + 1) / 2) * 0.6;
+    // Swipe Left → Next
+    if (details.primaryVelocity! < 0) {
+      nextImage();
+    }
 
-                final x = sin(angle) * 180;
+    // Swipe Right → Previous
+    if (details.primaryVelocity! > 0) {
+      prevImage();
+    }
+  },
 
-                return Transform(
-                  alignment: Alignment.center,
-                  transform: Matrix4.identity()
-                    ..setEntry(3, 2, 0.001)
-                    ..translate(x, 0.0, z * 100),
-                  child: Transform.scale(
-                    scale: scale,
-                    child: Opacity(
-                      opacity: 0.4 + ((z + 1) / 2) * 0.6,
-                      child: CircleAvatar(
-                        radius: 70,
-                        backgroundImage:
-                            AssetImage(images[index]),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            )..sort((a, b) => 0),
-          );
-        },
+  child: AnimatedSwitcher(
+    duration: const Duration(milliseconds: 1200),
+    transitionBuilder: (child, animation) {
+      return FadeTransition(
+        opacity: animation,
+        child: child,
+      );
+    },
+    child: Container(
+      key: ValueKey(images[currentIndex]),
+      width: mobile ? 220 : 300,
+      height: mobile ? 220 : 300,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        image: DecorationImage(
+          image: AssetImage(images[currentIndex]),
+          fit: BoxFit.cover,
+        ),
       ),
-    );
-  }
+    ),
+  ),
+),
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
+      if (!mobile)
+        Positioned(
+          left: 100,
+          child: IconButton(
+            onPressed: prevImage,
+            icon: const Icon(
+              Icons.arrow_back_ios_new,
+              color: Colors.black,
+              size: 35,
+            ),
+          ),
+        ),
+
+      if (!mobile)
+        Positioned(
+          right: 100,
+          child: IconButton(
+            onPressed: nextImage,
+            icon: const Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.black,
+              size: 35,
+            ),
+          ),
+        ),
+    ],
+  ),
+);
+}
+      @override
+      void dispose() {
+        timer?.cancel();
+        super.dispose();
+      }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/header.dart';
 import '../widgets/job_card.dart';
 import '../widgets/mobile_drawer.dart';
+import '../pages/home_page.dart';
 
 
 
@@ -33,6 +34,7 @@ final ScrollController _controller = ScrollController();
         });
       }
     });
+    
   }
 
 
@@ -54,7 +56,20 @@ _lastMobile = mobile;
 
     return Scaffold(
       key: _scaffoldKey,
-        drawer: mobile ? const MobileDrawer() : null,
+        drawer: mobile
+    ? MobileDrawer(
+        onServicesTap: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const HomePage(
+                scrollToServices: true,
+              ),
+            ),
+          );
+        },
+      )
+    : null,
         body: Stack(
         children: [
           SingleChildScrollView(
@@ -163,11 +178,20 @@ Padding(
           ),
 
           Header(
-            key: ValueKey(mobile),
-            isScrolled: isScrolled,
-            mobile: mobile,
-            scaffoldKey: _scaffoldKey,
-          ),
+              isScrolled: isScrolled,
+              mobile: mobile,
+              scaffoldKey: _scaffoldKey,
+              onServicesTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const HomePage(
+                      scrollToServices: true,
+                    ),
+                  ),
+                );    
+              },
+            )
         ],
        ),
       );

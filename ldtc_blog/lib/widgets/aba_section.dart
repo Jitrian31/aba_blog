@@ -1,99 +1,81 @@
 import 'package:flutter/material.dart';
-
 import 'rotating_gallery.dart';
+import 'about_content.dart';
+
 
 class AbaSection extends StatelessWidget {
   const AbaSection({super.key});
-  
 
   @override
   Widget build(BuildContext context) {
     final mobile = MediaQuery.of(context).size.width < 768;
 
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 24,
+      padding: EdgeInsets.symmetric(
+        horizontal: mobile ? 20 : 80,
         vertical: 80,
       ),
-      child: mobile
-          ? Column(
-              children: [
-                _content(),
-                const SizedBox(height: 40),
-                const RotatingGallery(),
-              ],
-            )
-          : Row(
-              children: [
-                Expanded(child: _content()),
-                const Expanded(
-                  child: RotatingGallery(),
-                ),
-              ],
+      child: Column(
+        children: [
+
+          /// Heading
+          Text(
+            "Emotional and Behavioral Support for Children",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: mobile ? 28 : 48,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xff0D5C63),
             ),
-    );
-  }
-
-  Widget _content() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "About Our Therapy Center",
-          style: TextStyle(
-            fontSize: 42,
-            fontWeight: FontWeight.bold,
           ),
-        ),
 
-        const SizedBox(height: 20),
+          const SizedBox(height: 20),
 
-        const Text(
-           '''ABA Learning Difference Therapy Center is a private, multi-branch developmental
-and behavioral intervention facility in the Philippines that specializes in supporting children and teens with special needs
+          SizedBox(
+            width: 900,
+            child: Text(
+              "Our team strives to make every therapy session a positive, enjoyable, and comfortable experience for children.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: mobile ? 18 : 22,
+                color: Colors.black54,
+                height: 1.5,
+              ),
+            ),
+          ),
 
-Guided by the motto "No child will be left behind," the center provides 
-evidence-based practices to help neurodivergent individuals and children with developmental disabilities build crucial life skills.
-            ''',
-  style: TextStyle(
-    fontSize: 20,
-    height: 1.6,
-    color: Colors.black87,
-  )
-),
+          const SizedBox(height: 70),
 
-        const SizedBox(height: 30),
+          mobile
+              ? Column(
+                  children: [
+                    const RotatingGallery(),
+                    const SizedBox(height: 40),
+                    _content(),
+                  ],
+                )
+              : Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(width: 120), // itutulak ang text pakanan
 
-        ElevatedButton(
-  onPressed: () {},
-  style: ElevatedButton.styleFrom(
-    backgroundColor: const Color(0xFF7ED957),
-    foregroundColor: Colors.white,
-    padding: const EdgeInsets.symmetric(
-      horizontal: 30,
-      vertical: 18,
-    ),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(30),
-    ),
-  ),
-  child: const Row(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      Text(
-        "Explore About ABA LDTC",
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),
+                    Expanded(
+                      flex: 1,
+                      child: AboutContent(),
+                    ),
+
+                    const SizedBox(width: 30),
+
+                    const Expanded(
+                      flex: 1,
+                      child: RotatingGallery(),
+                    ),
+                  ],
+                )
+        ],
       ),
-      SizedBox(width: 10),
-      Icon(Icons.arrow_forward),
-      ],
-    ),
-  ),
-      ],
     );
   }
-}
 
+  Widget _content() => const AboutContent();
+}

@@ -3,7 +3,17 @@ import 'package:ldtc_blog/Pages/career_page.dart';
 import '../pages/home_page.dart';
 
 class MobileDrawer extends StatelessWidget {
-  const MobileDrawer({super.key});
+
+final VoidCallback? onServicesTap;
+  final VoidCallback? onAboutTap;
+
+  const MobileDrawer({
+    super.key,
+    this.onServicesTap,
+    this.onAboutTap,
+  });
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -39,16 +49,12 @@ class MobileDrawer extends StatelessWidget {
             },
           ),
 
-ListTile(
+          ListTile(
             title: const Text("Services"),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const HomePage(),
-                ),
-              );
-            },
+              onTap: () {
+                Navigator.pop(context);
+                onServicesTap?.call();
+              },
           ),
 
           ListTile(
@@ -86,11 +92,12 @@ ListTile(
           ),
 
           ListTile(
-            title: const Text("About Us"),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
+              title: const Text("About Us"),
+              onTap: () {
+                Navigator.pop(context);
+                onAboutTap?.call();
+              },
+            ),
 
           ListTile(
             title: const Text("Contact Us"),

@@ -8,8 +8,11 @@ class HeroSlider extends StatefulWidget {
   const HeroSlider({super.key});
 
   @override
-  State<HeroSlider> createState() => _HeroSliderState();
+  State<HeroSlider> createState() => _HeroSliderState(); 
 }
+
+
+
 
 class _HeroSliderState extends State<HeroSlider> {
   final PageController controller = PageController();
@@ -22,7 +25,7 @@ class _HeroSliderState extends State<HeroSlider> {
     super.initState();
 
     timer = Timer.periodic(
-      const Duration(seconds: 4),
+      const Duration(seconds: 10),
       (_) {
         currentPage++;
 
@@ -38,6 +41,7 @@ class _HeroSliderState extends State<HeroSlider> {
       },
     );
   }
+  
 
   @override
   void dispose() {
@@ -45,6 +49,8 @@ class _HeroSliderState extends State<HeroSlider> {
     controller.dispose();
     super.dispose();
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +104,8 @@ class _HeroSliderState extends State<HeroSlider> {
                       onPressed: () {},
                       child: const Text("Learn More"),
                     )
+
+
                   ],
                 ),
               )

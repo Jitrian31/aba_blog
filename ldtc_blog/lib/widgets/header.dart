@@ -9,12 +9,16 @@
     final bool isScrolled;
     final bool mobile;
     final GlobalKey<ScaffoldState>? scaffoldKey;
+    final VoidCallback? onServicesTap;
+    final VoidCallback? onAboutTap;
 
     const Header({
       super.key,
       required this.isScrolled,
       required this.mobile,
       this.scaffoldKey,
+      this.onServicesTap,
+      this.onAboutTap,
     });
 
     
@@ -62,12 +66,16 @@
                               const HomePage(),
                             ),
 
-                            _navButton(
-                              context,
-                              "Services",
-                              isScrolled,
-                              null,
-                            ),
+                            TextButton(
+                                  onPressed: onServicesTap,
+                                  child: Text(
+                                    "Services",
+                                    style: TextStyle(
+                                      color: isScrolled ? Colors.black87 : Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
 
                             _navButton(
                               context,

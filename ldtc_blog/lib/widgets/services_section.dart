@@ -14,11 +14,10 @@ Widget _serviceCard(
   String description,
 ) {
   return Container(
-    height: 500,
     margin: const EdgeInsets.all(30),
     padding: const EdgeInsets.all(35),
     decoration: BoxDecoration(
-      color: Colors.white,
+      color: const Color.fromARGB(255, 255, 255, 255),
       borderRadius: BorderRadius.circular(25),
       boxShadow: const [
         BoxShadow(
@@ -100,7 +99,7 @@ Widget _serviceCard(
     return Center(
       child: Container(
         width: mobile ? double.infinity : 1300,
-        height: mobile ? null : 600,
+        height: mobile ? 900 : 600,
         margin: const EdgeInsets.symmetric(vertical: 60),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -113,7 +112,7 @@ Widget _serviceCard(
           ],
         ),
 
-        child: mobile
+child: mobile
     ? Stack(
         alignment: Alignment.center,
         children: [
@@ -124,22 +123,53 @@ Widget _serviceCard(
                 const SizedBox(height: 20),
 
                 const Text(
-                  "Our Services",
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                          "Our Services",
+                          style: TextStyle(
+                            fontSize: 35,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
+                        SizedBox(height: 30),
+
+                        Text(
+                          "We provide customized development tracks and learning pathways tailored for every age group and milestone.",
+                          style: TextStyle(
+                            fontSize: 18,
+                            height: 1.8,
+                            color: Colors.black54,
+                          ),
+                        ),
+
+                        SizedBox(height: 20),
+
+                        Text(
+                          "Our therapists are committed to helping children build communication, independence, confidence, and essential life skills.",
+                          style: TextStyle(
+                            fontSize: 18,
+                            height: 1.8,
+                            color: Colors.black54,
+                          ),
+                        ),
 
                 const SizedBox(height: 30),
 
-                SizedBox(
-                  height: 420,
-                  child: _serviceCard(
-                    services[currentIndex]["title"]!,
-                    services[currentIndex]["description"]!,
-                  ),
-                ),
+                GestureDetector(
+                      onHorizontalDragEnd: (details) {
+                        if (details.primaryVelocity! < 0) {
+                          next();
+                        } else if (details.primaryVelocity! > 0) {
+                          prev();
+                        }
+                      },
+                      child: SizedBox(
+                        height: 420,
+                        child: _serviceCard(
+                          services[currentIndex]["title"]!,
+                          services[currentIndex]["description"]!,
+                        ),
+                      ),
+                    )
               ],
             ),
           ),
@@ -220,7 +250,7 @@ Widget _serviceCard(
                     ),
                   ),
 
-                                    const VerticalDivider(width: 1),
+                  const VerticalDivider(width: 1),
 
                                     // RIGHT
                         Expanded(
@@ -273,23 +303,23 @@ Widget _serviceCard(
                           ),
                         ),
 
-      Positioned(
-        right: 10,
-        child: CircleAvatar(
-          radius: 28,
-          backgroundColor: const Color(0xFF7ED957),
-          child: IconButton(
-            onPressed: next,
-            icon: const Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-    ],
-  ),
-),
+                          Positioned(
+                            right: 10,
+                            child: CircleAvatar(
+                              radius: 28,
+                              backgroundColor: const Color(0xFF7ED957),
+                              child: IconButton(
+                                onPressed: next,
+                                icon: const Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
               ),
       ),
